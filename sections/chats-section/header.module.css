@@ -1,0 +1,37 @@
+.header {
+  display: flex;
+  padding: 10px 20px;
+  justify-content: space-between;
+  align-items: center;
+  height: 64;
+}
+
+.headerIconGroup {
+  width: 96px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.headerIcon {
+  height: 40px;
+  width: 40px;
+}
+
+.popoverBox {
+  width: 235px !important;
+}
+
+.popoverButton {
+  color: rgb(10, 10, 10) !important;
+  display: flex;
+  justify-content: start !important;
+  gap: 10px;
+  height: 36px !important;
+  font-size: 14px !important;
+}
+.popoverButtonText {
+  font-size: 14px !important;
+  text-transform: capitalize;
+  font-weight: 400 !important;
+}
