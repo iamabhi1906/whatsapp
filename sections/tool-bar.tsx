@@ -1,8 +1,10 @@
+"use client";
 import { Badge, Box, Divider, IconButton, Stack } from "@mui/material";
 import styles from "./tool-bar.module.css";
 import Image from "next/image";
 import aiLogo from "@/public/ai-logo.webp";
-import profilePhoto from "@/public/profile-photo.jpeg";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store";
 
 function iconColor(isActive: boolean) {
   return isActive ? "#070604" : "#686765";
@@ -13,6 +15,7 @@ function activeBackgroundColor(isActive: boolean) {
 }
 
 export default function ToolBar() {
+  const { user } = useSelector((state: RootState) => state.users);
   return (
     <Box className={styles.layout}>
       <Stack direction={"column"} className={styles.iconsGroup}>
@@ -167,13 +170,15 @@ export default function ToolBar() {
           </Badge>
         </IconButton>
         <Box className={styles.iconBox}>
-          <Image
-            src={profilePhoto}
-            alt="profile-photo"
-            width={28}
-            height={28}
-            className={styles.profilePhoto}
-          />
+          {user?.avatar && (
+            <Image
+              src={user.avatar}
+              alt="profile-photo"
+              width={28}
+              height={28}
+              className={styles.profilePhoto}
+            />
+          )}
         </Box>
       </Stack>
     </Box>

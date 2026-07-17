@@ -11,6 +11,9 @@ import {
 } from "@mui/material";
 import styles from "./header.module.css";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/app/store";
+import { logout } from "@/features/users/user.slice";
 
 export default function ChatSectionsHeader() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -24,6 +27,8 @@ export default function ChatSectionsHeader() {
   };
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
+
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <Box className={styles.header}>
@@ -235,7 +240,14 @@ export default function ChatSectionsHeader() {
           </Button>
 
           {/* Logout */}
-          <Button variant="text" fullWidth className={styles.popoverButton}>
+          <Button
+            variant="text"
+            fullWidth
+            className={styles.popoverButton}
+            onClick={() => {
+              dispatch(logout());
+            }}
+          >
             <SvgIcon
               sx={{
                 height: 18,

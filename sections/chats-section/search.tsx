@@ -31,8 +31,12 @@ export default function ChatSearch() {
             },
           },
           "& .MuiOutlinedInput-input": {
-            padding: "9px 50px 14px",
+            padding: "10px 50px 10px",
             alignItems: "center",
+            "&::placeholder": {
+              color: "#758087",
+              opacity: 1,
+            },
           },
         }}
       />

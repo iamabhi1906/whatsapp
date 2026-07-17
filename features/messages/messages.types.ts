@@ -1,12 +1,18 @@
 import { Chat } from "../chats/chats.types";
 
+export enum MessageTypes {
+  TEXT = "text",
+  IMAGE = "image",
+}
+
 export interface Message {
   id: string;
-  text: string;
+  senderId: string;
+  type: MessageTypes;
+  content: string;
   createdAt: string;
   updatedAt: string;
-  senderId: string;
-  readBy: string[];
+  readBy: Record<string, boolean>;
 }
 
 export interface MessageState {
@@ -14,4 +20,8 @@ export interface MessageState {
   loading: boolean;
   error: string | null;
   messages: Message[];
+  sendingMessage: Omit<
+    Message,
+    "id" | "createdAt" | "updatedAt" | "readBy"
+  > | null;
 }

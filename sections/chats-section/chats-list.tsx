@@ -1,45 +1,52 @@
 "use client";
 
 import { AppDispatch, RootState } from "@/app/store";
-import { getUserChats } from "@/features/chats/chats.action";
-import { Chat } from "@/features/chats/chats.types";
 import { Box, Stack, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./chat-list.module.css";
 import Image from "next/image";
 import moment from "moment";
-import { selectChat } from "@/features/chats/chats.slice";
+import { fetchConversations } from "@/features/conversion/conversion.action";
+import { ConversationListItem } from "@/features/conversion/conversion.types";
+import { selectConversation } from "@/features/conversion/conversion.slice";
 
 export default function ChatList() {
-  const { chats, loading } = useSelector((state: RootState) => state.chats);
+  const { conversations } = useSelector((state: RootState) => state.conversion);
+  const { user } = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(getUserChats({ userId: "unknown" }));
-  }, [dispatch]);
+    if (user) {
+      dispatch(fetchConversations(user.id));
+    }
+  }, [dispatch, user]);
 
   return (
     <Box className={styles.chatList}>
-      {loading && <Typography>Loading</Typography>}
-      {chats.map((chat) => (
-        <ChatListCard key={chat.name} chat={chat} />
+      {/* {loading && <Typography>Loading</Typography>} */}
+      {conversations.map((conversation) => (
+        <ChatListCard key={conversation.id} conversation={conversation} />
       ))}
     </Box>
   );
 }
 
-function ChatListCard({ chat }: { chat: Chat }) {
+function ChatListCard({
+  conversation,
+}: {
+  conversation: ConversationListItem;
+}) {
   const dispatch = useDispatch<AppDispatch>();
   return (
     <Box
       className={styles.chatListCard}
-      onClick={() => dispatch(selectChat({ chat }))}
+      onClick={() => dispatch(selectConversation(conversation))}
     >
       <Box className={styles.chatListAvatarBox}>
         <Image
-          src={chat.avatar}
-          alt={`${chat.name}`}
+          src={conversation.avatar}
+          alt={`${conversation.name}`}
           width={48}
           height={48}
           className={styles.chatListAvatar}
@@ -47,25 +54,39 @@ function ChatListCard({ chat }: { chat: Chat }) {
       </Box>
       <Box className={styles.chatInfo}>
         <Stack>
-          <Typography className={styles.chatName}>{chat.name}</Typography>
-          <Typography className={styles.chatMessage}>
-            {chat.lastMessage.text}
+          <Typography className={styles.chatName + " " + styles.singleLineClip}>
+            {conversation.name}
           </Typography>
-        </Stack>
-        <Stack className={styles.chatLeftInfo} spacing={1}>
           <Typography
-            className={styles.chatTime}
-            sx={{
-              color: chat.unreadMessageCount > 0 ? "#1daa61" : "#00000099",
-              fontWeight: chat.unreadMessageCount > 0 ? "545" : "400",
-            }}
+            className={styles.chatMessage + " " + styles.singleLineClip}
           >
-            {moment(chat.lastMessage.createdAt).format("hh:mm A")}
+            {conversation.lastMessage
+              ? conversation.lastMessage.content
+              : "No message yet"}
           </Typography>
-          {chat.unreadMessageCount > 0 && (
-            <Box className={styles.unReadBadge}>{chat.unreadMessageCount}</Box>
-          )}
         </Stack>
+        {conversation.lastMessage && (
+          <Stack className={styles.chatLeftInfo} spacing={1}>
+            <Typography
+              className={styles.chatTime + " " + styles.singleLineClip}
+              sx={{
+                color:
+                  conversation.lastMessage.readBy.length <= 0
+                    ? "#1daa61"
+                    : "#00000099",
+                fontWeight:
+                  conversation.lastMessage.readBy.length > 0 ? "545" : "400",
+              }}
+            >
+              {moment(conversation.lastMessage.createdAt).format("hh:mm A")}
+            </Typography>
+            {conversation.lastMessage.readBy.length <= 0 && (
+              <Box className={styles.unReadBadge}>
+                {conversation.lastMessage.readBy.length}
+              </Box>
+            )}
+          </Stack>
+        )}
       </Box>
     </Box>
   );

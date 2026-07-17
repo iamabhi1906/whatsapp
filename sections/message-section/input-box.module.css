@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 26px;
+  min-height: 52px;
+  line-height: 20px;
+  background-color: #ffffff;
+  margin: 0px 15px 15px;
+}
+
+.input {
+  flex: 1;
+  color: #0a0a0a !important;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.input textarea {
+  color: #000000 !important;
+}
+
+.input textarea::placeholder {
+  color: #8696a0;
+  opacity: 1;
+}
+
+.sendButton {
+  background: #1daa61 !important;
+  color: white !important;
+  width: 40px;
+  height: 40px;
+  transition: 0.2s;
+}
+
+.sendButton:hover {
+  background: #06cf9c !important;
+}
+
+.emojiPicker {
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+  z-index: 10;
+}

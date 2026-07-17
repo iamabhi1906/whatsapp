@@ -1,39 +1,44 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { MessageState } from "./messages.types";
-import { getChatMessages } from "./message.actions";
+import { Message, MessageState } from "./messages.types";
+import { asyncGetMessages, asyncSendMessages } from "./message.actions";
 
 const initialState: MessageState = {
   chat: null,
   loading: false,
   error: null,
   messages: [],
+  sendingMessage: null,
 };
 
 const messageSlice = createSlice({
   name: "chats",
   initialState,
   reducers: {
-    // selectChat: (state, action: PayloadAction<ChatSelectInput>) => {
-    //   state.chat = action.payload.chat;
-    // },
+    setMessages: (state, action: PayloadAction<Message[]>) => {
+      state.messages = action.payload;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(getChatMessages.pending, (state) => {
+    builder.addCase(asyncGetMessages.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(getChatMessages.fulfilled, (state, action) => {
+    builder.addCase(asyncGetMessages.fulfilled, (state, action) => {
       state.loading = false;
       state.messages = action.payload;
     });
-    builder.addCase(getChatMessages.rejected, (state, action) => {
+    builder.addCase(asyncGetMessages.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload ?? "Some thing went wrong";
+    });
+
+    builder.addCase(asyncSendMessages.pending, (state, action) => {
+      state.sendingMessage = action.meta.arg;
     });
   },
 });
 
-// export const { selectChat } = messageSlice.actions;
+export const { setMessages } = messageSlice.actions;
 const messageReducer = messageSlice.reducer;
 
 export default messageReducer;

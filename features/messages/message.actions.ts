@@ -1,53 +1,46 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Message } from "./messages.types";
+import { sendMessage, sendMessageArg } from "@/services/messages/send-message";
+import {
+  getConversationMessages,
+  getMessageById,
+} from "@/services/messages/get-message";
+import { updateConversationLastMessage } from "@/services/conversation/create-get";
 
-const CURRENT_USER_ID = "current-user";
-
-const conversation = [
-  "Hey!",
-  "Hi! How are you?",
-  "Doing great. What about you?",
-  "Pretty good! Working on the chat screen.",
-  "Nice! Is everything working?",
-  "Almost. Just mocking the API for now.",
-  "Sounds good.",
-  "Redux Toolkit makes it pretty easy.",
-  "Yep",
-  "Let's test sending messages next.",
-  "Sure, I'll work on that.",
-  "Awesome, thanks!",
-];
-
-export const getChatMessages = createAsyncThunk<
-  Message[],
-  { chatId: number },
+export const asyncSendMessages = createAsyncThunk<
+  Message,
+  sendMessageArg,
   { rejectValue: string }
->("get/chat/messages", async ({ chatId }) => {
-  //   await new Promise((resolve) => setTimeout(resolve, 1000));
+>(
+  "send/chat/messages",
+  async (payload: sendMessageArg, { rejectWithValue }) => {
+    try {
+      const messageId = await sendMessage(payload);
+      const message = await getMessageById(payload.conversationId, messageId);
+      if (!message) {
+        throw new Error("Message could not be retrieved after sending.");
+      }
+      await updateConversationLastMessage(payload.conversationId, message);
+      return message;
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : "Failed to send message",
+      );
+    }
+  },
+);
 
-  const otherUserId = `user-${chatId}`;
-  const now = Date.now();
-
-  const messages: Message[] = conversation.map((text, index) => {
-    const fromCurrentUser = index % 2 === 0;
-
-    return {
-      id: (index + 1).toString(),
-      text,
-      senderId: fromCurrentUser ? CURRENT_USER_ID : otherUserId,
-      readBy: fromCurrentUser
-        ? [CURRENT_USER_ID, otherUserId]
-        : index < conversation.length - 2
-          ? [CURRENT_USER_ID, otherUserId]
-          : [CURRENT_USER_ID],
-      createdAt: new Date(
-        now - (conversation.length - index) * 60 * 1000,
-      ).toISOString(),
-      updatedAt: new Date(
-        now - (conversation.length - index) * 60 * 1000,
-      ).toISOString(),
-    };
-  });
-
-  return messages;
+export const asyncGetMessages = createAsyncThunk<
+  Message[],
+  string,
+  { rejectValue: string }
+>("get/chat/messages", async (conversationId: string, { rejectWithValue }) => {
+  try {
+    const messages = await getConversationMessages(conversationId);
+    return messages;
+  } catch (error) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : "Failed to send message",
+    );
+  }
 });

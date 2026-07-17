@@ -1,0 +1,57 @@
+.chatContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0px 57px 0px 62px;
+}
+
+.messageRow {
+  display: flex;
+  margin-bottom: 8px;
+  align-items: flex-end;
+}
+
+.left {
+  justify-content: flex-start;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.bubble {
+  max-width: 68%;
+  padding: 8px 10px 6px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.myBubble {
+  background: rgb(217, 253, 211);
+  border-top-right-radius: 2px;
+}
+
+.otherBubble {
+  background: white;
+  border-top-left-radius: 2px;
+}
+
+.messageText {
+  font-size: 15px !important;
+  color: #111;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.meta {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.time {
+  font-size: 11px !important;
+  color: #667781;
+}

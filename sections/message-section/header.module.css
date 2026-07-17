@@ -5,6 +5,8 @@
   border: 0px solid rgba(10, 10, 10);
   box-shadow: rgba(10, 10, 10, 0.12) 0px;
   padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .chatAvatar {
