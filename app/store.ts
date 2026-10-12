@@ -1,4 +1,4 @@
-import chatsReducer from "@/features/chats/chats.slice";
+// import chatsReducer from "@/features/chats/chats.slice";
 import conversationReducer from "@/features/conversion/conversion.slice";
 import messageReducer from "@/features/messages/message.slice";
 import userReducer from "@/features/users/user.slice";
@@ -13,7 +13,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import storage from "./storage";
 
 const persistedUserReducer = persistReducer(
   {
@@ -26,7 +26,6 @@ const persistedUserReducer = persistReducer(
 const store = configureStore({
   reducer: {
     users: persistedUserReducer,
-    chats: chatsReducer,
     conversion: conversationReducer,
     messages: messageReducer,
   },

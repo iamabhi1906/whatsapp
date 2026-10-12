@@ -1,9 +1,9 @@
 import { Grid } from "@mui/material";
 import styles from "./chats-section.module.css";
-import ChatSectionsHeader from "./chats-section/header";
-import ChatSearch from "./chats-section/search";
-import ChatShortcuts from "./chats-section/shortcuts";
-import ChatList from "./chats-section/chats-list";
+import ChatSectionsHeader from "./header/header";
+import ChatSearch from "./search/search";
+import ChatShortcuts from "./shortcuts/shortcuts";
+import ChatList from "./chat-list/chats-list";
 
 export default function ChatsSection() {
   return (

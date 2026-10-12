@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserState } from "./users.types";
-import { signInWithGoogle } from "./user.action";
+import {
+  signInWithEmailPassword,
+  signInWithGoogle,
+  signUpWithEmailPassword,
+} from "./user.action";
 
 const initialState: UserState = {
   user: null,
@@ -18,18 +22,29 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(signInWithGoogle.pending, (state) => {
+    const pending = (state: UserState) => {
       state.loading = true;
       state.error = "";
-    });
-    builder.addCase(signInWithGoogle.fulfilled, (state, action) => {
+    };
+    const fulfilled = (state: UserState, action: { payload: UserState["user"] }) => {
       state.loading = false;
       state.user = action.payload;
-    });
-    builder.addCase(signInWithGoogle.rejected, (state, action) => {
+    };
+    const rejected = (state: UserState, action: { payload?: string }) => {
       state.loading = false;
       state.error = action.payload ?? "Something went wrong";
-    });
+    };
+
+    builder
+      .addCase(signInWithGoogle.pending, pending)
+      .addCase(signInWithGoogle.fulfilled, fulfilled)
+      .addCase(signInWithGoogle.rejected, rejected)
+      .addCase(signInWithEmailPassword.pending, pending)
+      .addCase(signInWithEmailPassword.fulfilled, fulfilled)
+      .addCase(signInWithEmailPassword.rejected, rejected)
+      .addCase(signUpWithEmailPassword.pending, pending)
+      .addCase(signUpWithEmailPassword.fulfilled, fulfilled)
+      .addCase(signUpWithEmailPassword.rejected, rejected);
   },
 });
 

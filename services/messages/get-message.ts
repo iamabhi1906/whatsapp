@@ -23,6 +23,7 @@ export const getMessageById = async (
 export const getConversationMessages = async (
   conversationId: string,
 ): Promise<Message[]> => {
+  console.log("i am called");
   const messagesQuery = query(
     ref(realTimeDB, `${MESSAGES_ROOT}/${conversationId}`),
     orderByChild("createdAt"),

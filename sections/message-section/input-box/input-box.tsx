@@ -2,12 +2,12 @@
 import { Box, IconButton, InputBase, SvgIcon } from "@mui/material";
 import styles from "./input-box.module.css";
 import React, { useState } from "react";
-import EmojiPick from "./input-methods/emoji-picker";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/store";
 import { asyncSendMessages } from "@/features/messages/message.actions";
 import { sendMessageArg } from "@/services/messages/send-message";
 import { MessageTypes } from "@/features/messages/messages.types";
+import EmojiPick from "../input-methods/emoji-picker";
 
 interface MessageInputPros {
   conversationId: string;

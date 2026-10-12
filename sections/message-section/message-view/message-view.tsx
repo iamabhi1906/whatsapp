@@ -49,6 +49,7 @@ export default function MessageView({
 
   useEffect(() => {
     if (conversationId) {
+      console.log(conversationId);
       dispatch(asyncGetMessages(conversationId));
     }
   }, [conversationId, dispatch]);
@@ -83,6 +84,7 @@ function MessageBox({
   const isRead = message.readBy[conversation.participant.id];
 
   useEffect(() => {
+    console.log("Seen", conversationId);
     markMessageAsRead(conversationId, message.id, user.id);
   }, [conversationId, message.id, user.id]);
 

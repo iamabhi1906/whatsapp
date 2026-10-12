@@ -10,6 +10,7 @@ import moment from "moment";
 import { fetchConversations } from "@/features/conversion/conversion.action";
 import { ConversationListItem } from "@/features/conversion/conversion.types";
 import { selectConversation } from "@/features/conversion/conversion.slice";
+import { User } from "@/features/users/users.types";
 
 export default function ChatList() {
   const { conversations } = useSelector((state: RootState) => state.conversion);
@@ -21,12 +22,17 @@ export default function ChatList() {
       dispatch(fetchConversations(user.id));
     }
   }, [dispatch, user]);
+  if (!user) return;
 
   return (
     <Box className={styles.chatList}>
       {/* {loading && <Typography>Loading</Typography>} */}
-      {conversations.map((conversation) => (
-        <ChatListCard key={conversation.id} conversation={conversation} />
+      {conversations.map((conversation, index) => (
+        <ChatListCard
+          key={conversation.id || `c-${index}`}
+          conversation={conversation}
+          user={user}
+        />
       ))}
     </Box>
   );
@@ -34,8 +40,10 @@ export default function ChatList() {
 
 function ChatListCard({
   conversation,
+  user,
 }: {
   conversation: ConversationListItem;
+  user: User;
 }) {
   const dispatch = useDispatch<AppDispatch>();
   return (
@@ -70,17 +78,17 @@ function ChatListCard({
             <Typography
               className={styles.chatTime + " " + styles.singleLineClip}
               sx={{
-                color:
-                  conversation.lastMessage.readBy.length <= 0
-                    ? "#1daa61"
-                    : "#00000099",
-                fontWeight:
-                  conversation.lastMessage.readBy.length > 0 ? "545" : "400",
+                color: conversation.lastMessage.readBy[user.id]
+                  ? "#1daa61"
+                  : "#00000099",
+                fontWeight: conversation.lastMessage.readBy[user.id]
+                  ? "545"
+                  : "400",
               }}
             >
               {moment(conversation.lastMessage.createdAt).format("hh:mm A")}
             </Typography>
-            {conversation.lastMessage.readBy.length <= 0 && (
+            {conversation.lastMessage.readBy[user.id] && (
               <Box className={styles.unReadBadge}>
                 {conversation.lastMessage.readBy.length}
               </Box>

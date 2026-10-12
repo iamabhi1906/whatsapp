@@ -3,9 +3,9 @@ import { RootState } from "@/app/store";
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import styles from "./message-area.module.css";
-import MessageAreaHeader from "./header";
-import MessageView from "./message-view";
-import MessageInput from "./input-box";
+import MessageAreaHeader from "../header/header";
+import MessageView from "../message-view/message-view";
+import MessageInput from "../input-box/input-box";
 
 export default function MessageArea() {
   const { conversation } = useSelector((state: RootState) => state.conversion);
